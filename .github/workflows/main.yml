@@ -1,0 +1,65 @@
+name: Provision and Deploy .NET 8 Function
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+env:
+  AZURE_FUNCTIONAPP_NAME: 'Tradingbot-Mediator'
+  DOTNET_VERSION: '8.0.x'
+
+jobs:
+  provision:
+    runs-on: ubuntu-latest
+    name: 🏗️ Provision Infrastructure with Terraform
+    environment: prod # Use the same environment as your other project
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4
+
+      - name: 'Setup Terraform'
+        uses: hashicorp/setup-terraform@v3
+
+      - name: 'Login to Azure'
+        uses: azure/login@v1
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: 'Terraform Init'
+        run: terraform init -input=false
+        working-directory: ./terraform
+
+      - name: 'Terraform Apply'
+        run: terraform apply -auto-approve -input=false
+        working-directory: ./terraform
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: 🚀 Build and Deploy .NET 8 Code
+    needs: provision
+    steps:
+      - name: 'Checkout GitHub Action'
+        uses: actions/checkout@v4
+
+      - name: 'Setup .NET SDK'
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: ${{ env.DOTNET_VERSION }}
+
+      - name: 'Build and Publish .NET Project'
+        run: |
+          dotnet build --configuration Release
+          dotnet publish -c Release -o ./publish
+
+      - name: 'Zip Artifact for Deployment'
+        run: |
+          cd ./publish
+          zip -r ../deployment.zip .
+
+      - name: 'Deploy to Azure Functions'
+        uses: Azure/functions-action@v1
+        with:
+          app-name: ${{ env.AZURE_FUNCTIONAPP_NAME }}
+          package: './deployment.zip'
