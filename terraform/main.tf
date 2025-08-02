@@ -22,6 +22,10 @@ variable "subscriptionId" {
   description = "The Azure Subscription ID in which all resources in this example should be created."
 }
 
+variable "queueConnectionString" {
+  description = "The connection string for the Azure Storage Queue."
+}
+
 
 # Find the existing resource group
 data "azurerm_resource_group" "rg" {
@@ -88,8 +92,7 @@ resource "azurerm_linux_function_app" "new" {
     "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.new.instrumentation_key,
     "FUNCTIONS_EXTENSION_VERSION"    = "~4"
     "FUNCTIONS_WORKER_RUNTIME"       = "dotnet-isolated" # Required for .NET 8 Function Apps
-
-    
+    "QUEUECONNECTION"                = var.queueConnectionString,
     # Add any other app settings your .NET app needs here
   }
 }
