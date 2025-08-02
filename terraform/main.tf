@@ -83,6 +83,8 @@ resource "azurerm_linux_function_app" "new" {
   app_settings = {
     "APPINSIGHTS_INSTRUMENTATIONKEY" = azurerm_application_insights.new.instrumentation_key,
     "FUNCTIONS_EXTENSION_VERSION"    = "~4"
+    "FUNCTIONS_WORKER_RUNTIME"        = "dotnet-isolated"
+
     
     # Add any other app settings your .NET app needs here
   }
