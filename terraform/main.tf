@@ -44,8 +44,8 @@ resource "azurerm_storage_account" "new" {
 
 resource "azurerm_log_analytics_workspace" "main" {
   name                = "tradingbotmediator-log-analytics"
-  location            = azurerm_resource_group.main.location
-  resource_group_name = azurerm_resource_group.main.name
+  location            = azurerm_resource_group.rg.location
+  resource_group_name = azurerm_resource_group.rg.name
   sku                 = "PerGB2018"
   retention_in_days   = 30
 }
