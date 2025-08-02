@@ -82,6 +82,8 @@ resource "azurerm_linux_function_app" "new" {
   storage_account_access_key = azurerm_storage_account.new.primary_access_key
 
   site_config {
+    application_insights_key = azurerm_application_insights.new.instrumentation_key
+
     application_stack {
       dotnet_version = "8.0"
       use_dotnet_isolated_runtime = true
