@@ -2,6 +2,7 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
+      version = "~>3.90"
     }
   }
   # You should set up a new, unique state file key for this project
