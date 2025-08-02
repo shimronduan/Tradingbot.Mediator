@@ -42,12 +42,21 @@ resource "azurerm_storage_account" "new" {
   account_replication_type = "LRS"
 }
 
+resource "azurerm_log_analytics_workspace" "main" {
+  name                = "tradingbotmediator-log-analytics"
+  location            = azurerm_resource_group.main.location
+  resource_group_name = azurerm_resource_group.main.name
+  sku                 = "PerGB2018"
+  retention_in_days   = 30
+}
+
 # 2. Create new Application Insights for monitoring this specific app
 resource "azurerm_application_insights" "new" {
   name                = "Tradingbot-Mediator-insights"
   location            = data.azurerm_resource_group.rg.location
   resource_group_name = data.azurerm_resource_group.rg.name
   application_type    = "web"
+  workspace_id        = azurerm_log_analytics_workspace.main.id
   # Note: You might need a new Log Analytics workspace or can reuse an existing one
   # For simplicity, this example creates a new one.
 }
