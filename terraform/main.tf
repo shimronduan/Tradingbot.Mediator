@@ -2,7 +2,6 @@ terraform {
   required_providers {
     azurerm = {
       source  = "hashicorp/azurerm"
-      version = "~>3.90"
     }
   }
   # You should set up a new, unique state file key for this project
@@ -18,7 +17,10 @@ provider "azurerm" {
   features {}
 }
 
-# --- Data Sources to look up existing resources ---
+variable "subscriptionId" {
+  description = "The Azure Subscription ID in which all resources in this example should be created."
+}
+
 
 # Find the existing resource group
 data "azurerm_resource_group" "rg" {

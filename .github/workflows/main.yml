@@ -32,6 +32,8 @@ jobs:
         working-directory: ./terraform
 
       - name: 'Terraform Apply'
+        env:
+          TF_VAR_subscriptionId: ${{ vars.AZURE_SUBSCRIPTION_ID }}
         run: terraform apply -auto-approve -input=false
         working-directory: ./terraform
 
