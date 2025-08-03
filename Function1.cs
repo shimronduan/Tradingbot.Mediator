@@ -11,13 +11,19 @@ public class Function1(ILogger<Function1> logger)
 {
     private readonly ILogger<Function1> _logger = logger;
 
-    [Function("Function1")]
+    [Function("mediator")]
     public async Task<MultiResponse> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
     {
-        _logger.LogInformation("C# HTTP trigger function processed a request.");
 
         string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-
+        if (requestBody=="wakeup")
+        {
+            return new MultiResponse()
+            {
+                HttpResponse = new OkObjectResult("Wakeup signal received.")
+            };
+        }
+        _logger.LogInformation("C# HTTP trigger function processed a request. Request body: {RequestBody}", requestBody);
         return new MultiResponse()
         {
             Message = new MyQueueItem
