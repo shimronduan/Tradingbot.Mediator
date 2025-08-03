@@ -265,3 +265,6 @@ __pycache__/
 
 # Azurite
 __azurite__*
+
+__azurite_db_blob_*
+__blobstorage__
