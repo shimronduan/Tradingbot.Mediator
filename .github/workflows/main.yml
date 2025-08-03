@@ -34,6 +34,7 @@ jobs:
       - name: 'Terraform Apply'
         env:
           TF_VAR_subscriptionId: ${{ vars.AZURE_SUBSCRIPTION_ID }}
+          TF_VAR_queueConnectionString: ${{ secrets.QUEUE_CONNECTION_STRING }}
         run: terraform apply -auto-approve -input=false
         working-directory: ./terraform
 
