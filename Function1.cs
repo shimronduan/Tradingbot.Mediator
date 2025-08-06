@@ -7,9 +7,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Tradingbot.Mediator;
 
-public class Function1(ILogger<Function1> logger)
+public class Function1
 {
-    private readonly ILogger<Function1> _logger = logger;
+    private readonly ILogger<Function1> _logger;
+
+    public Function1(ILogger<Function1> logger)
+    {
+        _logger = logger;
+    }
 
     [Function("mediator")]
     public async Task<MultiResponse> Run([HttpTrigger(AuthorizationLevel.Function, "get", "post")] HttpRequest req)
